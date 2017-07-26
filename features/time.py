@@ -1,15 +1,16 @@
-import grove_128_64_oled as oled
+import screen
 import datetime
 import pytz
+
+ROW = 2
+
 
 def print_time():
     now = get_time()
     time_string = now.strftime("%H:%M:%S")
-    oled.setTextXY(0, 3)
-    oled.putString(time_string)
+    screen.print_string(0, ROW, time_string)
     date_string = now.strftime("%d.%m")
-    oled.setTextXY(10, 3)
-    oled.putString(date_string)
+    screen.print_string(10, ROW, date_string)
 
 
 def get_time():

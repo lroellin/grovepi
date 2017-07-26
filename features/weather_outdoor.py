@@ -1,73 +1,50 @@
+import icons
+import screen
+import weather_support
 import requests
 import requests_cache
 import json
-import grove_128_64_oled as oled
-import icons
+import os
 
 OWM_RATE_LIMIT_SECONDS = 600
 OWM_RATE_LIMIT_SECONDS_BUFFER = 10
 OWM_CITY_ID = "7286859"
 OWM_BASE_URL = "http://api.openweathermap.org/data/2.5/weather"
-OWM_API_KEY = ""
+OWM_API_KEY = os.environ["OWM_API_KEY"]
+
+ROW = 0
 
 
 class Weather(object):
-    def __init__(self, temp, temp_min, temp_max, humidity):
+    def __init__(self, temp, temp_min, temp_max, humidity, icon):
         self.temp = temp
         self.temp_min = temp_min
         self.temp_max = temp_max
         self.humidity = humidity
+        self.icon = icon
 
 
-def print_custom_character(character):
-    for i in range(8):
-        oled.sendData(character[i])
+def print_weather_icon(icon):
+    icon_parts = icons.icon_mapping[icon[:2]]
+    screen.print_16x16_icon(icon_parts)
 
 
-def print_16x16_icon(parts):
-    COLUMN_START = 6
-    ROW_START = 5
-
-    oled.setTextXY(COLUMN_START, ROW_START)
-    print_custom_character(parts[0])
-    oled.setTextXY(COLUMN_START, ROW_START + 1)
-    print_custom_character(parts[1])
-    oled.setTextXY(COLUMN_START + 1, ROW_START)
-    print_custom_character(parts[2])
-    oled.setTextXY(COLUMN_START + 1, ROW_START + 1)
-    print_custom_character(parts[3])
-
-
-def print_weather_icon(weather):
-    print_16x16_icon(icons.cloud_with_cloud_and_snow_parts)
-
-
-def print_weather(display_width, display_height):
+def print_weather():
     try:
         weather = get_weather()
 
-        oled.setTextXY(0, 0)
-        oled.putString(format_main_temperature(weather.temp))
+        screen.print_string(0, ROW, weather_support.format_accurate_temperature(weather.temp))
 
-        min_max = format_minmax_temperature(weather.temp_min) + "/" + format_minmax_temperature(weather.temp_max)
-        oled.setTextXY(display_width - 1 - len(min_max), 0)
-        oled.putString(min_max)
+        min_max = weather_support.format_inaccurate_temperature(
+            weather.temp_min) + "/" + weather_support.format_inaccurate_temperature(weather.temp_max)
+        screen.print_string(screen.OLED_COLUMNS - 1 - len(min_max), 0, min_max)
 
-        oled.setTextXY(6, 0)
-        oled.putString(str(weather.humidity) + "%")
+        screen.print_string(6, ROW, weather_support.format_humidity(weather.humidity))
 
-        print_weather_icon(weather)
+        print_weather_icon(weather.icon)
     except IOError as error:
-        oled.setTextXY(0, 0)
-        oled.putString("!" * 16)
+        screen.print_string(0, ROW, "!" * screen.OLED_COLUMNS)
         print str(error)
-
-
-def format_main_temperature(temp):
-    return "{:.1f}C".format(temp)
-
-def format_minmax_temperature(temp):
-    return "{:.0f}".format(temp)
 
 
 def get_weather():
@@ -75,14 +52,16 @@ def get_weather():
     parameters = {'id': OWM_CITY_ID, 'APPID': OWM_API_KEY,
                   'units': 'metric'}
     request = requests.get(OWM_BASE_URL, params=parameters)
-    if request.status_code == 200
+    if request.status_code == 200:
         # print "Cache: " + str(request.from_cache)
         # print json.dumps(request.json(), indent=2)
+        # print request.url
         return Weather(
             request.json()['main']['temp'],
             request.json()['main']['temp_min'],
             request.json()['main']['temp_max'],
             request.json()['main']['humidity'],
+            request.json()['weather'][0]['icon']
         )
     else:
         raise IOError("Return code not 200")
