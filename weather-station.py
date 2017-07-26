@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 from features import time, weather_outdoor, weather_indoor, screen
 from time import sleep
 

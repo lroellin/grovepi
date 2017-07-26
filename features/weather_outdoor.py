@@ -3,13 +3,13 @@ import screen
 import weather_support
 import requests
 import requests_cache
-import os
+import sys
 
 OWM_RATE_LIMIT_SECONDS = 600
 OWM_RATE_LIMIT_SECONDS_BUFFER = 10
 OWM_CITY_ID = "7286859"
 OWM_BASE_URL = "http://api.openweathermap.org/data/2.5/weather"
-OWM_API_KEY = os.environ["OWM_API_KEY"]
+OWM_API_KEY = sys.argv[1]
 
 ROW = 0
 
@@ -25,7 +25,7 @@ class Weather(object):
 
 def print_weather_icon(icon):
     icon_parts = icons.icon_mapping[icon[:2]]
-    screen.print_16x16_icon(icon_parts)
+    screen.print_16x16_icon(icon_parts, 7, 6)
 
 
 def print_weather():

@@ -9,17 +9,14 @@ def print_custom_character(character):
         oled.sendData(character[i])
 
 
-def print_16x16_icon(parts):
-    COLUMN_START = 6
-    ROW_START = 6
-
-    oled.setTextXY(COLUMN_START, ROW_START)
+def print_16x16_icon(parts, column_start, row_start):
+    oled.setTextXY(column_start, row_start)
     print_custom_character(parts[0])
-    oled.setTextXY(COLUMN_START, ROW_START + 1)
+    oled.setTextXY(column_start, row_start + 1)
     print_custom_character(parts[1])
-    oled.setTextXY(COLUMN_START + 1, ROW_START)
+    oled.setTextXY(column_start + 1, row_start)
     print_custom_character(parts[2])
-    oled.setTextXY(COLUMN_START + 1, ROW_START + 1)
+    oled.setTextXY(column_start + 1, row_start + 1)
     print_custom_character(parts[3])
 
 
