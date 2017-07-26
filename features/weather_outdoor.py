@@ -8,7 +8,7 @@ OWM_RATE_LIMIT_SECONDS = 600
 OWM_RATE_LIMIT_SECONDS_BUFFER = 10
 OWM_CITY_ID = "7286859"
 OWM_BASE_URL = "http://api.openweathermap.org/data/2.5/weather"
-OWM_API_KEY = "0509248a42ba828d7d2c4d2077269d0b"
+OWM_API_KEY = ""
 
 
 class Weather(object):
@@ -26,7 +26,7 @@ def print_custom_character(character):
 
 def print_16x16_icon(parts):
     COLUMN_START = 6
-    ROW_START = 4
+    ROW_START = 5
 
     oled.setTextXY(COLUMN_START, ROW_START)
     print_custom_character(parts[0])
@@ -43,19 +43,24 @@ def print_weather_icon(weather):
 
 
 def print_weather(display_width, display_height):
-    weather = get_weather()
+    try:
+        weather = get_weather()
 
-    oled.setTextXY(0, 0)
-    oled.putString(format_main_temperature(weather.temp))
+        oled.setTextXY(0, 0)
+        oled.putString(format_main_temperature(weather.temp))
 
-    min_max = format_minmax_temperature(weather.temp_min) + "/" + format_minmax_temperature(weather.temp_max)
-    oled.setTextXY(display_width - 1 - len(min_max), 0)
-    oled.putString(min_max)
+        min_max = format_minmax_temperature(weather.temp_min) + "/" + format_minmax_temperature(weather.temp_max)
+        oled.setTextXY(display_width - 1 - len(min_max), 0)
+        oled.putString(min_max)
 
-    oled.setTextXY(0, display_height - 1)
-    oled.putString(str(weather.humidity) + "%")
+        oled.setTextXY(6, 0)
+        oled.putString(str(weather.humidity) + "%")
 
-    print_weather_icon(weather)
+        print_weather_icon(weather)
+    except IOError as error:
+        oled.setTextXY(0, 0)
+        oled.putString("!" * 16)
+        print str(error)
 
 
 def format_main_temperature(temp):
@@ -70,11 +75,14 @@ def get_weather():
     parameters = {'id': OWM_CITY_ID, 'APPID': OWM_API_KEY,
                   'units': 'metric'}
     request = requests.get(OWM_BASE_URL, params=parameters)
-    # print "Cache: " + str(request.from_cache)
-    # print json.dumps(request.json(), indent=2)
-    return Weather(
-        request.json()['main']['temp'],
-        request.json()['main']['temp_min'],
-        request.json()['main']['temp_max'],
-        request.json()['main']['humidity'],
-    )
+    if request.status_code == 200
+        # print "Cache: " + str(request.from_cache)
+        # print json.dumps(request.json(), indent=2)
+        return Weather(
+            request.json()['main']['temp'],
+            request.json()['main']['temp_min'],
+            request.json()['main']['temp_max'],
+            request.json()['main']['humidity'],
+        )
+    else:
+        raise IOError("Return code not 200")

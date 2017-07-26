@@ -12,7 +12,7 @@ char = [0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF]
 
 With that, you have 16 columns and 8 rows. This means, these characters are 8x8 pixels.
 
-## How these fonts work
+## How these fonts work (in hexadecimal)
 
 On the individual character level, you're operating in an 8x8 pixel grid. Each character is comprised of 8 bytes.
 
@@ -53,7 +53,7 @@ And that, is how the pixels are turned on.
 
 In a nibble, we have four bits. We also have half a column, which is 4 pixels. Each pixel is either on or off, depending on how its bit is set.
 
-## Designing pixel stuff
+## Designing pixel stuff: going down to the bits
 
 If you wanna design your own character, start with a 8x8 pixel grid. Then, draw it.
 

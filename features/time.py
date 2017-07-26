@@ -5,8 +5,11 @@ import pytz
 def print_time():
     now = get_time()
     time_string = now.strftime("%H:%M:%S")
-    oled.setTextXY(4, 3)
+    oled.setTextXY(0, 3)
     oled.putString(time_string)
+    date_string = now.strftime("%d.%m")
+    oled.setTextXY(10, 3)
+    oled.putString(date_string)
 
 
 def get_time():
