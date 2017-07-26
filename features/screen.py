@@ -29,7 +29,7 @@ def print_string(x, y, string):
 
 
 def init():
-    oled.init()  # initialze SEEED OLED display
+    oled.init()  # initialize SEEED OLED display
 
     oled.clearDisplay()  # clear the screen and set start position to top left corner
     oled.setNormalDisplay()  # Set display to normal mode (i.e non-inverse mode)

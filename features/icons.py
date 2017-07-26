@@ -255,13 +255,13 @@ cloud_with_cloud_and_snow = [
 ]
 
 icon_mapping = {
-        "01": sun,
-        "02": cloud_with_sun,
-        "03": cloud,
-        "04": cloud_with_cloud,
-        "09": cloud_with_cloud_and_rain,
-        "10": cloud_with_sun_and_rain,
-        "11": cloud_with_cloud_and_thunder,
-        "13": cloud_with_cloud_and_snow,
-        "50": mist
-    }
+    "01": sun,
+    "02": cloud_with_sun,
+    "03": cloud,
+    "04": cloud_with_cloud,
+    "09": cloud_with_cloud_and_rain,
+    "10": cloud_with_sun_and_rain,
+    "11": cloud_with_cloud_and_thunder,
+    "13": cloud_with_cloud_and_snow,
+    "50": mist
+}

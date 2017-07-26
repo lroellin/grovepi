@@ -3,7 +3,6 @@ import screen
 import weather_support
 import requests
 import requests_cache
-import json
 import os
 
 OWM_RATE_LIMIT_SECONDS = 600
