@@ -1,5 +1,7 @@
+import symbols
+
 def format_accurate_temperature(temp):
-    return "{:.1f}C".format(temp)
+    return "{:.1f}".format(temp)
 
 
 def format_inaccurate_temperature(temp):

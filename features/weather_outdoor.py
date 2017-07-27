@@ -1,5 +1,6 @@
 import icons
 import screen
+import symbols
 import weather_support
 import requests
 import requests_cache
@@ -25,25 +26,28 @@ class Weather(object):
 
 def print_weather_icon(icon):
     icon_parts = icons.icon_mapping[icon[:2]]
-    screen.print_16x16_icon(icon_parts, 7, 6)
+    screen.print_16x16_icon(screen.align_center_by_length(2), 6, icon_parts)
 
 
 def print_weather():
     try:
         weather = get_weather()
 
-        screen.print_string(0, ROW, weather_support.format_accurate_temperature(weather.temp))
+        screen.print_string(0, ROW, weather_support.format_accurate_temperature(weather.temp) + symbols.THERMOMETER)
 
         min_max = weather_support.format_inaccurate_temperature(
-            weather.temp_min) + "/" + weather_support.format_inaccurate_temperature(weather.temp_max)
-        screen.print_string(screen.OLED_COLUMNS - 1 - len(min_max), 0, min_max)
+            weather.temp_min) + "-" + weather_support.format_inaccurate_temperature(weather.temp_max)
+        screen.print_string(screen.align_center(min_max), 0, min_max)
 
-        screen.print_string(6, ROW, weather_support.format_humidity(weather.humidity))
+        humidity = weather_support.format_humidity(weather.humidity)
+        screen.print_string(screen.align_right(humidity), ROW, humidity)
+
+
 
         print_weather_icon(weather.icon)
     except IOError as error:
         screen.print_string(0, ROW, "!" * screen.OLED_COLUMNS)
-        print str(error)
+        print(str(error.message))
 
 
 def get_weather():
